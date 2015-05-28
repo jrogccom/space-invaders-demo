@@ -8,38 +8,91 @@
 
 import SpriteKit
 
+let playerSpriteName : String = "ship_1"
+
+struct PhysicsCategory {
+    static let None : UInt32 = 0
+    static let All : UInt32 = UInt32.max
+    static let Bogie : UInt32 = 0b1
+    static let Item : UInt32 = 0b10
+}
+
+enum MoveDirection {
+    case Left
+    case Right
+    case None
+    
+    func sense() -> Int {
+        switch self {
+        case .Left:
+            return -1
+        case .Right:
+            return 1
+        default:
+            return 0
+        }
+    }
+}
 class GameScene: SKScene {
+    
+    let player = SKSpriteNode(imageNamed: playerSpriteName)
+    
+    var direction = MoveDirection.None
+    
     override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 65;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
-        
-        self.addChild(myLabel)
+        backgroundColor = SKColor.blackColor()
+        player.position = CGPoint(x: size.width / 2, y: size.width * 0.1)
+        addChild(player)
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
         for touch: AnyObject in touches {
+            
             let location = touch.locationInNode(self)
+            direction = directionForTouch(location)
             
-            let sprite = SKSpriteNode(imageNamed:"Spaceship")
+        }
+    }
+    
+    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+        for touch : AnyObject in touches {
             
-            sprite.xScale = 0.5
-            sprite.yScale = 0.5
-            sprite.position = location
+            let location = touch.locationInNode(self)
+            direction = directionForTouch(location)
             
-            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
+        }
+    }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        
+        for touch : AnyObject in touches {
             
-            sprite.runAction(SKAction.repeatActionForever(action))
+            direction = MoveDirection.None
             
-            self.addChild(sprite)
         }
     }
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        let moveDist = 10
+        let moveTime = 0.2
+        let moveAction = SKAction.moveBy(CGVector(dx: CGFloat(moveDist * direction.sense()), dy: 0.0), duration: moveTime)
+        player.runAction(moveAction)
+    }
+    
+    func directionForTouch(touchPoint: CGPoint) -> MoveDirection {
+        
+        var leftRect = CGRectZero
+        var rightRect = CGRectZero
+        
+        CGRectDivide(self.frame, &leftRect, &rightRect, CGRectGetWidth(self.frame) / 2, CGRectEdge.MinXEdge)
+        
+        if leftRect.contains(touchPoint) {
+            return MoveDirection.Left
+        } else {
+            return MoveDirection.Right
+        }
     }
 }
