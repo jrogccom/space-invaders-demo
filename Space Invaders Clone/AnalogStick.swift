@@ -102,9 +102,12 @@ class AnalogStick: UIControl {
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        touchDown = true
         let touch = touches.anyObject() as UITouch
-        touchPoint = adjustedPointWithMaxDistanceToPoint(toPoint: touch.locationInView(self), fromPoint: boundsCenter, maxDist: outerRadius)
+        let point = touch.locationInView(self)
+        if (pointInRadius(point: point - boundsCenter, radius: outerRadius)) {
+            touchDown = true
+            touchPoint = adjustedPointWithMaxDistanceToPoint(toPoint: point, fromPoint: boundsCenter, maxDist: outerRadius)
+        }
 //        self.setNeedsDisplay()
     }
     
@@ -130,6 +133,10 @@ class AnalogStick: UIControl {
             let angle = atan2(toPoint.y - fromPoint.y, toPoint.x - fromPoint.x)
             return CGPoint(x: outerRadius * cos(angle) + fromPoint.x, y: outerRadius * sin(angle) + fromPoint.y)
         }
+    }
+    
+    func pointInRadius (#point: CGPoint, radius: CGFloat) -> Bool {
+        return pow(point.x, 2) + pow(point.y, 2) < pow(radius, 2)
     }
 
 }
