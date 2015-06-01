@@ -8,6 +8,7 @@
 
 import SpriteKit
 
+
 let playerSpriteName : String = "ship_1"
 
 struct PhysicsCategory {
@@ -36,6 +37,8 @@ enum MoveDirection {
 class GameScene: SKScene {
     
     let player = SKSpriteNode(imageNamed: playerSpriteName)
+    
+    let analog : AnalogStick = AnalogStick()
     
     var direction = MoveDirection.None
     
