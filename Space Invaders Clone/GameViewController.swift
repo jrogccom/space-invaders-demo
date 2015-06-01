@@ -27,11 +27,15 @@ extension SKNode {
 
 class GameViewController: UIViewController {
 
+    @IBOutlet weak var analogStick: AnalogStick!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let scene = GameScene(size:view.bounds.size)
         let gameView = view as SKView
+        
+        scene.analog = analogStick
+        
         gameView.showsFPS = true
         gameView.showsNodeCount = true
         gameView.ignoresSiblingOrder = true

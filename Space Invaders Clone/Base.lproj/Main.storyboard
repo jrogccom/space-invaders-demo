@@ -54,6 +54,9 @@
                             <constraint firstItem="QAn-ip-X7l" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="-53" id="lOY-sY-bGC"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="analogStick" destination="QAn-ip-X7l" id="TTb-Dt-GLX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>

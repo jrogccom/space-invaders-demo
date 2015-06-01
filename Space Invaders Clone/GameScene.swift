@@ -37,10 +37,10 @@ enum MoveDirection {
 class GameScene: SKScene {
     
     let player = SKSpriteNode(imageNamed: playerSpriteName)
-    
-    let analog : AnalogStick = AnalogStick()
+    weak var analog : AnalogStick?
     
     var direction = MoveDirection.None
+    var playerMaxXSpeed = 10.0 // per second
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
@@ -79,9 +79,7 @@ class GameScene: SKScene {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
-        let moveDist = 10
-        let moveTime = 0.2
-        let moveAction = SKAction.moveBy(CGVector(dx: CGFloat(moveDist * direction.sense()), dy: 0.0), duration: moveTime)
+        let moveAction = SKAction.moveBy(CGVector(dx: analog!.vector.dx * CGFloat(playerMaxXSpeed), dy: 0.0), duration: 1)
         player.runAction(moveAction)
     }
     

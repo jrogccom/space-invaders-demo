@@ -56,6 +56,10 @@ class AnalogStick: UIControl {
         }
     }
     
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        _touchPoint = boundsCenter
+    }
     var relativeTouchPoint : CGPoint {
         get {
             return touchPoint - boundsCenter
