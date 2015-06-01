@@ -24,6 +24,10 @@ func / (point: CGPoint, scalar: CGFloat) -> CGPoint {
     return CGPoint(x: point.x / scalar, y: point.y / scalar)
 }
 
+func pointToVector(point : CGPoint) -> CGVector {
+    return CGVector(dx: point.x, dy: point.y)
+}
+
 #if !(arch(x86_64) || arch(arm64))
 func sqrt(a: CGFloat) -> CGFloat {
     return CGFloat(sqrt(Float(a)))
@@ -64,9 +68,9 @@ class AnalogStick: UIControl {
         }
     }
     var touchDown = false
-    var vectorPoint : CGPoint {
+    var vector : CGVector {
         get {
-            return relativeTouchPoint / outerRadius
+            return pointToVector(relativeTouchPoint / outerRadius)
         }
     }
     
